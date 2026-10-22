@@ -464,6 +464,10 @@ p {
   .card-company { font-size: 14px; line-height: 20px; }
   .card-email { color: var(--gray-700); overflow-wrap: anywhere; }
   .card-meta { color: var(--gray-500); }
+  .card-status { display: inline-flex; align-items: center; gap: 2px; }
+  .card-more { position: relative; display: inline-flex; }
+  .card-more-button { display: flex; align-items: center; justify-content: center; width: 40px; height: 36px; margin: -13px -14px -3px -6px; padding: 10px 0 0; border: 0; background: none; color: var(--gray-500); cursor: pointer; border-radius: var(--radius-control); } /* 누르는 영역 40×36, 아이콘 자리는 그대로 · 아래로는 3px만 넘쳐 「재발송」과 안 겹침 */
+  .profile-menu.card-more-menu { top: calc(100% + 4px); right: 0; min-width: 140px; }
   .link-action {
     display: inline-flex;
     align-items: center;
@@ -471,8 +475,8 @@ p {
     flex: none;
     border: 0;
     background: none;
-    padding: 7px 0; /* 누르는 영역 32 이상, 화면 모양은 글자 높이 */
-    margin: -7px 0;
+    padding: 0 0 14px; /* 누르는 영역 32, 화면 모양은 글자 높이 · 위는 ⋮ 자리라 아래로 넓힘 */
+    margin: 0 0 -14px;
     font-size: 13px;
     font-weight: 600;
     color: var(--gray-900);
@@ -481,6 +485,12 @@ p {
   .link-action--muted { font-weight: 400; color: var(--gray-500); }
 
   .pagination { grid-template-columns: 1fr; justify-items: center; gap: 8px; margin-top: 0; }
+  /* 작은 버튼은 보이는 크기 그대로, 누르는 영역만 40 가까이 */
+  .page-btn,
+  .profile-button { position: relative; }
+  .page-btn::after { content: ""; position: absolute; inset: -6px -4px; } /* 36×40 · 버튼 사이 8px라 옆과 안 겹침 */
+  .profile-button::after { content: ""; position: absolute; inset: -6px; }
+  .eye-toggle { width: 40px; height: 38px; margin-right: 2px; }
   .pagination-range,
   .page-size { display: none; }
 
