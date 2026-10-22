@@ -60,17 +60,12 @@ export default function LoginPage() {
 
   return (
     <main className="login">
-      {/* 휴대폰: 위쪽 48px 띠에 흰 로고, 화면 전체가 다크 모드처럼 반전 */}
-      <div className="login-top">
-        <Brand inverse />
-      </div>
       <form className="login-card" onSubmit={onSubmit} noValidate>
         <div className="login-brand">
-          <Brand />
+          <Brand inverse />
         </div>
-        <h1 className="t-heading-200">
-          로그인
-        </h1>
+        {/* 제목은 화면에서 빼고(버튼과 같은 말) 화면 읽기 프로그램용으로만 남겨요 */}
+        <h1 className="visually-hidden">로그인</h1>
         {notice && (
           <p className="error" role="status">
             {notice}
@@ -130,6 +125,7 @@ export default function LoginPage() {
 
         <p className="help">계정이 없으면 운영 담당자에게 요청해 주세요.</p>
       </form>
+      <p className="login-copyright">ⓒ 2026 UNIVERSE AI</p>
     </main>
   );
 }

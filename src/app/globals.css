@@ -82,7 +82,7 @@ p {
 /* ── 로고 · 배지 ── */
 .brand { display: flex; align-items: center; gap: 8px; height: 40px; flex: none; }
 .brand img { display: block; width: 134px; height: 20px; }
-.badge { padding: 4px 8px; border-radius: 32px; background: var(--gray-900); color: var(--gray-0); }
+.badge { padding: 4px 8px; border-radius: 0; /* 백오피스 화면처럼 각지게 · 라벨이라 버튼보다 가볍게 */ background: var(--gray-100); color: var(--gray-700); }
 .brand--inverse .badge { background: var(--gray-0); color: var(--gray-900); }
 
 /* ── 버튼 ── */
@@ -115,26 +115,33 @@ p {
   display: flex;
   align-items: center;
   height: 36px;
-  padding: 0 12px;
+  padding: 0;
   border: 1px solid var(--gray-300);
   border-radius: var(--radius-control);
   background: var(--gray-0);
 }
 .input-box:focus-within { border-color: var(--gray-900); }
 .input-box.is-error { border-color: var(--danger-400); }
+/* 글자를 받는 영역이 칸 전체를 채워요(눌리는 곳 · 자동 완성 색이 칸과 같게) */
 .input-box input {
   flex: 1;
   min-width: 0;
+  align-self: stretch;
   border: 0;
   outline: 0;
-  padding: 0;
+  padding: 0 12px;
+  border-radius: var(--radius-control);
   background: transparent;
   font-size: 13px;
   line-height: 18px;
 }
 .input-box input::placeholder { color: var(--gray-400); }
+/* 브라우저 자동 완성(하늘색 바탕)을 칸 색으로 덮어요 */
+.input-box input:-webkit-autofill,
+.search input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px var(--gray-0) inset; -webkit-text-fill-color: var(--gray-900); }
+.login-card .input-box input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px var(--gray-800) inset; -webkit-text-fill-color: var(--gray-0); caret-color: var(--gray-0); }
 /* 비밀번호 보기/숨기기 — 가려져 있으면 눈 감김(Off), 보이면 눈(On) */
-.eye-toggle { display: flex; align-items: center; justify-content: center; flex: none; width: 32px; height: 32px; margin-right: -6px; padding: 0; border: 0; background: none; color: var(--gray-400); cursor: pointer; border-radius: var(--radius-control); }
+.eye-toggle { display: flex; align-items: center; justify-content: center; flex: none; width: 32px; height: 32px; margin-right: 6px; padding: 0; border: 0; background: none; color: var(--gray-400); cursor: pointer; border-radius: var(--radius-control); }
 .eye-toggle:hover { color: var(--gray-500); }
 .help { color: var(--gray-500); }
 .error { color: var(--danger-400); }
@@ -161,29 +168,31 @@ p {
   font-weight: 700;
 }
 
-/* ── 로그인 (어두운 바탕은 로그인만) ── */
+/* ── 로그인 (어두운 바탕은 로그인만) — 카드 없이 어두운 바탕에 바로(휴대폰과 같은 모양) ── */
 .login {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 24px 16px 72px;
   background: var(--gray-900);
 }
-.login-top { display: none; }
 .login-card {
   width: 100%;
-  max-width: 420px;
-  background: var(--gray-0);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-container);
-  padding: 32px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  color: var(--gray-0);
 }
-.login-card .input-box { height: 44px; }
-.login-card .btn { height: 48px; font-size: 14px; line-height: 20px; }
+.login-brand { display: flex; justify-content: center; margin-bottom: 16px; }
+.login-card .input-box { height: 44px; background: var(--gray-800); border-color: var(--gray-700); }
+.login-card .input-box:focus-within { border-color: var(--gray-0); }
+.login-card .input-box input { color: var(--gray-0); }
+.login-card .btn { height: 48px; font-size: 14px; line-height: 20px; background: var(--gray-0); color: var(--gray-900); }
+.login-card .help { color: var(--gray-400); }
+.login-copyright { position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; color: var(--gray-500); font-size: 12px; }
 
 /* ── 로그인 뒤: 내부 화면 틀 (사내 직원 관리와 같은 모양) ── */
 .app-nav {
@@ -426,15 +435,12 @@ p {
 /* ── 휴대폰: 보이는 높이가 짧아서 촘촘하게 ── */
 @media (max-width: 640px) {
   /* 로그인: 다크 모드처럼 전체 반전 */
-  .login { display: block; padding: 0; }
-  .login-top { display: flex; align-items: center; height: 48px; padding: 0 16px; }
-  .login-brand { display: none; }
-  .login-card { max-width: none; background: none; border: 0; padding: 20px 16px; gap: 16px; color: var(--gray-0); }
-  .login-card h1 { font-size: 18px; line-height: 28px; }
+  .login { padding: 24px 16px 72px; }
+  .login-card { gap: 16px; }
   .login-card .field { gap: 6px; }
-  .login-card .input-box { height: 40px; background: var(--gray-800); border-color: var(--gray-700); }
+  .login-card .input-box { height: 40px; }
   .login-card .input-box:focus-within { border-color: var(--gray-0); }
-  .login-card .btn { height: 40px; background: var(--gray-0); color: var(--gray-900); }
+  .login-card .btn { height: 40px; }
   .login-card .help { color: var(--gray-400); }
 
   .input-box input { font-size: 16px; line-height: 24px; } /* 16px보다 작으면 iPhone이 칸을 누를 때 화면을 확대해요 */
@@ -495,4 +501,29 @@ p {
   .mail-failure-sentence { display: block; }
 
   .toast { left: 16px; right: 16px; bottom: 16px; }
+}
+
+/* ── 호버: 마우스가 있는 기기에서만(터치에서 눌린 채 남지 않게) ── */
+@media (hover: hover) {
+  .btn-dark:hover:not(:disabled) { background: var(--gray-800); }
+  .btn-outline:hover:not(:disabled) { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-danger-outline:hover:not(:disabled) { background: var(--gray-50); }
+  .login-card .btn:hover:not(:disabled) { background: var(--gray-100); }
+  .app-menu-item:hover { color: var(--gray-900); }
+  .search:hover:not(:focus-within),
+  .select:hover:not(:focus-within),
+  .input-box:hover:not(:focus-within):not(.is-error) { border-color: var(--gray-400); }
+  .login-card .input-box:hover:not(:focus-within):not(.is-error) { border-color: var(--gray-500); }
+  .segmented button:hover:not([aria-checked="true"]) { background: var(--gray-50); }
+  .tr:not(.th):hover { background: var(--gray-50); }
+  .page-btn:hover:not(:disabled):not(.is-current) { background: var(--gray-50); color: var(--gray-900); }
+  .page-size:hover .popup-select-button { color: var(--gray-700); }
+  .status-chip:hover:not(.is-on) { background: var(--gray-50); }
+  .link-action:hover { color: var(--gray-700); }
+  .link-action--muted:hover { color: var(--gray-700); }
+  .empty-action:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .search-clear:hover,
+  .eye-toggle:hover { color: var(--gray-500); }
+  .login-card .eye-toggle:hover { color: var(--gray-300); }
+  .profile-button:hover .identity-name { color: var(--gray-600); }
 }
