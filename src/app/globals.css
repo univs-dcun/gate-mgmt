@@ -82,7 +82,7 @@ p {
 /* ── 로고 · 배지 ── */
 .brand { display: flex; align-items: center; gap: 8px; height: 40px; flex: none; }
 .brand img { display: block; width: 134px; height: 20px; }
-.badge { padding: 4px 8px; border-radius: 32px; background: var(--gray-900); color: var(--gray-0); }
+.badge { padding: 4px 8px; border-radius: 0; /* 백오피스 화면처럼 각지게 · 라벨이라 버튼보다 가볍게 */ background: var(--gray-100); color: var(--gray-700); }
 .brand--inverse .badge { background: var(--gray-0); color: var(--gray-900); }
 
 /* ── 버튼 ── */
@@ -115,26 +115,35 @@ p {
   display: flex;
   align-items: center;
   height: 36px;
-  padding: 0 12px;
+  padding: 0;
   border: 1px solid var(--gray-300);
   border-radius: var(--radius-control);
   background: var(--gray-0);
 }
 .input-box:focus-within { border-color: var(--gray-900); }
 .input-box.is-error { border-color: var(--danger-400); }
+.input-box.is-readonly { background: var(--gray-50); } /* 이미 만든 계정의 회사명 — 고칠 수 없어요 */
+.input-box.is-readonly input { color: var(--gray-500); }
+/* 글자를 받는 영역이 칸 전체를 채워요(눌리는 곳 · 자동 완성 색이 칸과 같게) */
 .input-box input {
   flex: 1;
   min-width: 0;
+  align-self: stretch;
   border: 0;
   outline: 0;
-  padding: 0;
+  padding: 0 12px;
+  border-radius: var(--radius-control);
   background: transparent;
   font-size: 13px;
   line-height: 18px;
 }
 .input-box input::placeholder { color: var(--gray-400); }
+/* 브라우저 자동 완성(하늘색 바탕)을 칸 색으로 덮어요 */
+.input-box input:-webkit-autofill,
+.search input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px var(--gray-0) inset; -webkit-text-fill-color: var(--gray-900); }
+.login-card .input-box input:-webkit-autofill { -webkit-box-shadow: 0 0 0 1000px var(--gray-800) inset; -webkit-text-fill-color: var(--gray-0); caret-color: var(--gray-0); }
 /* 비밀번호 보기/숨기기 — 가려져 있으면 눈 감김(Off), 보이면 눈(On) */
-.eye-toggle { display: flex; align-items: center; justify-content: center; flex: none; width: 32px; height: 32px; margin-right: -6px; padding: 0; border: 0; background: none; color: var(--gray-400); cursor: pointer; border-radius: var(--radius-control); }
+.eye-toggle { display: flex; align-items: center; justify-content: center; flex: none; width: 32px; height: 32px; margin-right: 6px; padding: 0; border: 0; background: none; color: var(--gray-400); cursor: pointer; border-radius: var(--radius-control); }
 .eye-toggle:hover { color: var(--gray-500); }
 .help { color: var(--gray-500); }
 .error { color: var(--danger-400); }
@@ -161,29 +170,32 @@ p {
   font-weight: 700;
 }
 
-/* ── 로그인 (어두운 바탕은 로그인만) ── */
+/* ── 로그인 (어두운 바탕은 로그인만) — 카드 없이 어두운 바탕에 바로(휴대폰과 같은 모양) ── */
 .login {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 24px 16px 72px;
   background: var(--gray-900);
 }
-.login-top { display: none; }
 .login-card {
   width: 100%;
-  max-width: 420px;
-  background: var(--gray-0);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-container);
-  padding: 32px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  color: var(--gray-0);
 }
-.login-card .input-box { height: 44px; }
-.login-card .btn { height: 48px; font-size: 14px; line-height: 20px; }
+.login-brand { display: flex; justify-content: center; margin-bottom: 16px; }
+.login-card .input-box { height: 44px; background: var(--gray-800); border-color: var(--gray-700); }
+.login-card .input-box:focus-within { border-color: var(--gray-0); }
+.login-card .input-box.is-error { border-color: var(--danger-400); } /* 어두운 칸 테두리가 오류 빨강을 덮지 않게 */
+.login-card .input-box input { color: var(--gray-0); }
+.login-card .btn { height: 48px; font-size: 14px; line-height: 20px; background: var(--gray-0); color: var(--gray-900); }
+.login-card .help { color: var(--gray-400); }
+.login-copyright { position: absolute; left: 0; right: 0; bottom: 32px; margin: 0; text-align: center; color: var(--gray-500); font-size: 12px; }
 
 /* ── 로그인 뒤: 내부 화면 틀 (사내 직원 관리와 같은 모양) ── */
 .app-nav {
@@ -227,13 +239,13 @@ p {
 }
 .profile-menu-email { display: none; margin: 0; padding: 8px 12px; color: var(--gray-300); border-bottom: 1px solid var(--gray-700); margin-bottom: 4px; overflow-wrap: anywhere; }
 .profile-menu-item { display: block; width: 100%; height: 36px; padding: 0 12px; border: 0; border-radius: var(--radius-control); background: none; text-align: left; font-size: 13px; font-weight: 600; color: var(--gray-0); cursor: pointer; }
-.profile-menu-item:hover { background: var(--gray-700); }
+.profile-menu-item:hover { background: var(--gray-500); }
 .avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--gray-500);
-  color: var(--gray-0);
+  background: var(--gray-100); /* 진한 동그라미가 버튼처럼 튀지 않게 */
+  color: var(--gray-700);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -287,25 +299,43 @@ p {
 .search-icon { color: var(--gray-400); flex: none; }
 .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 0; }
 .search input::placeholder { color: var(--gray-500); }
+.search input::-webkit-search-cancel-button { display: none; } /* 브라우저 기본 ✕ 대신 아래 지우기 버튼 */
+.search-clear { display: flex; align-items: center; justify-content: center; flex: none; width: 28px; height: 28px; margin-right: -8px; padding: 0; border: 0; background: none; color: var(--gray-400); cursor: pointer; border-radius: var(--radius-control); }
+.search-clear:hover { color: var(--gray-500); }
+.status-chips { display: none; }
 .search:focus-within,
 .select:focus-within { border-color: var(--gray-900); }
 .select { width: 160px; }
-.select select,
-.page-size select {
-  appearance: none;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  padding: 0 32px 0 8px;
-  color: var(--gray-600);
-  cursor: pointer;
-}
 .select-icon { position: absolute; right: 8px; pointer-events: none; color: var(--gray-500); }
+
+/* 선택 상자 — 열리면 프로필 메뉴와 같은 어두운 유리(그림자 없음) */
+.popup-select { position: relative; }
+.popup-select-button { display: flex; align-items: center; justify-content: space-between; gap: 6px; width: 100%; height: 100%; padding: 0 8px; border: 0; background: none; color: var(--gray-600); font: inherit; cursor: pointer; border-radius: var(--radius-control); }
+.popup-select-icon { flex: none; color: var(--gray-500); }
+.popup-select-button[aria-expanded="true"] .popup-select-icon { transform: rotate(180deg); }
+.popup-select-menu {
+  position: absolute;
+  left: 0;
+  z-index: 30;
+  min-width: 100%;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--overlay-dark-80);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--gray-700);
+  border-radius: var(--radius-control);
+}
+.popup-select-menu--bottom { top: calc(100% + 4px); }
+.popup-select-menu--top { bottom: calc(100% + 4px); }
+.popup-select-option { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 32px; padding: 0 10px; border-radius: var(--radius-control); color: var(--gray-0); white-space: nowrap; cursor: pointer; }
+.popup-select-option.is-active { background: var(--gray-500); } /* 어두운 유리 위에서 글자가 보이는 밝기 */
+.popup-select-option[aria-selected="true"] { font-weight: 600; }
+.popup-select-check { flex: none; color: var(--gray-0); }
 .count { margin-left: auto; color: var(--gray-500); }
 
-.table { border: 1px solid var(--gray-200); border-bottom: 0; }
+.table { border: 1px solid var(--gray-200); border-bottom: 0; overflow-x: auto; } /* 창이 좁으면(태블릿 · 창 나누기) 표 안에서 옆으로 밀어 봐요 */
 .tr {
   display: grid;
   /* 칸 폭은 표 전체에 비율로 나눠요(Figma 1392 기준 200 · 280 · 130 · 150 · 160 · 180 · 260). 관리 칸 최소 폭은 버튼 두 개가 한 줄에 들어가는 폭. */
@@ -314,6 +344,7 @@ p {
     minmax(90px, 160fr) minmax(120px, 180fr) minmax(230px, 260fr);
   align-items: center;
   min-height: 64px;
+  min-width: min-content;
   padding: 0 16px;
   border-bottom: 1px solid var(--gray-200);
 }
@@ -324,6 +355,10 @@ p {
 .dash { color: var(--gray-400); }
 .row-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .empty { padding: 80px 16px; text-align: center; color: var(--gray-500); border-bottom: 1px solid var(--gray-200); }
+.empty p { margin: 0; overflow-wrap: anywhere; }
+.empty-keyword { color: var(--gray-900); font-weight: 600; }
+.hit { background: var(--gray-100); color: inherit; border-radius: 2px; } /* 검색어와 맞은 글자 */
+.empty-action { margin-top: 12px; height: 32px; padding: 0 12px; border: 1px solid var(--gray-300); border-radius: var(--radius-control); background: var(--gray-0); color: var(--gray-700); font: inherit; font-weight: 600; cursor: pointer; }
 
 .status { display: inline-flex; align-items: center; gap: 6px; color: var(--gray-700); white-space: nowrap; }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -334,7 +369,7 @@ p {
 /* 안내 메일을 보내지 못한 첫 로그인 전 계정(일시적 발송 오류 · 이메일 주소 오류 · 메일 발송 실패) */
 .status--mail-failed { color: var(--danger-400); }
 .status--mail-failed .status-dot { background: var(--danger-400); }
-.cancel-note { color: var(--gray-500); white-space: nowrap; }
+.cancel-note { color: var(--gray-500); overflow-wrap: anywhere; } /* 취소한 직원 이메일이 길면 줄을 바꿔요(표 밖으로 넘치지 않게) */
 
 .cards { display: none; }
 
@@ -347,6 +382,7 @@ p {
   color: var(--gray-500);
 }
 .pages { display: flex; gap: 8px; }
+.pagination.is-single .pages { visibility: hidden; } /* 한 페이지뿐이면 번호는 감추고 칸 · 개수 고르기는 그대로 */
 .page-btn {
   min-width: 28px;
   height: 28px;
@@ -359,11 +395,12 @@ p {
   color: var(--gray-500);
   cursor: pointer;
 }
+.page-gap { min-width: 20px; text-align: center; color: var(--gray-400); }
 .page-btn.is-current { background: var(--gray-100); color: var(--gray-900); font-weight: 700; cursor: default; }
 .page-btn:disabled { color: var(--gray-300); cursor: default; }
-.page-size { position: relative; justify-self: end; display: flex; align-items: center; }
-.page-size select { padding: 0 22px 0 0; color: var(--gray-500); }
-.page-size .select-icon { right: 0; }
+.page-size { justify-self: end; height: 32px; }
+.page-size .popup-select-button { padding: 0; color: var(--gray-500); }
+.page-size .popup-select-menu { left: auto; right: 0; }
 
 /* ── 창 ── */
 .scrim {
@@ -374,6 +411,8 @@ p {
   align-items: flex-start;
   justify-content: center;
   padding: 180px 16px 16px;
+  overflow-y: auto; /* 창이 보이는 영역보다 길면(휴대폰 키보드) 창 안에서 스크롤 */
+  overscroll-behavior: contain;
   z-index: 10;
 }
 .dialog {
@@ -402,6 +441,7 @@ p {
 
 /* 메일 발송 실패 안내: 낱말 중간에서 줄이 바뀌지 않게(PC 는 한 줄, 휴대폰은 문장 끝에서) */
 .mail-failure { word-break: keep-all; }
+.mail-failure--lines .mail-failure-sentence { display: block; } /* 두 문장짜리 막힘 안내는 PC 도 문장마다 */
 
 /* ── 완료 알림: 어두운 유리 ── */
 .toast {
@@ -426,15 +466,12 @@ p {
 /* ── 휴대폰: 보이는 높이가 짧아서 촘촘하게 ── */
 @media (max-width: 640px) {
   /* 로그인: 다크 모드처럼 전체 반전 */
-  .login { display: block; padding: 0; }
-  .login-top { display: flex; align-items: center; height: 48px; padding: 0 16px; }
-  .login-brand { display: none; }
-  .login-card { max-width: none; background: none; border: 0; padding: 20px 16px; gap: 16px; color: var(--gray-0); }
-  .login-card h1 { font-size: 18px; line-height: 28px; }
+  .login { padding: 24px 16px 72px; }
+  .login-card { gap: 16px; }
   .login-card .field { gap: 6px; }
-  .login-card .input-box { height: 40px; background: var(--gray-800); border-color: var(--gray-700); }
+  .login-card .input-box { height: 40px; }
   .login-card .input-box:focus-within { border-color: var(--gray-0); }
-  .login-card .btn { height: 40px; background: var(--gray-0); color: var(--gray-900); }
+  .login-card .btn { height: 40px; }
   .login-card .help { color: var(--gray-400); }
 
   .input-box input { font-size: 16px; line-height: 24px; } /* 16px보다 작으면 iPhone이 칸을 누를 때 화면을 확대해요 */
@@ -447,23 +484,43 @@ p {
   .table,
   .select,
   .toolbar .btn { display: none; }
-  .avatar { width: 32px; height: 32px; }
+  .avatar { width: 28px; height: 28px; font-size: 12px; }
+  /* 휴대폰 위쪽 띠: 로고 · 배지를 한 단계 작게 */
+  .app-nav .brand { gap: 6px; }
+  .app-nav .brand img { width: 107px; height: 16px; }
+  .app-nav .badge { padding: 2px 6px; font-size: 10px; line-height: 14px; }
   .profile-menu { min-width: 220px; }
   .profile-menu-email { display: block; }
   .profile-menu-item { height: 40px; }
   .content { padding: 16px; gap: 12px; }
-  .page-title h1 { font-size: 18px; line-height: 28px; }
+  .page-title h1 { font-size: 20px; line-height: 28px; }
   .toolbar { flex-wrap: wrap; margin-bottom: 0; }
   .search { width: 100%; height: 40px; }
+  .status-chips { display: flex; gap: 8px; width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .status-chips.has-more { mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent); } /* 오른쪽에 칩이 더 있으면 끝을 흐리게 — 옆으로 밀 수 있다는 표시 */
+  .status-chips::-webkit-scrollbar { display: none; }
+  .status-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 12px; border: 1px solid var(--gray-200); border-radius: var(--radius-control); background: var(--gray-0); color: var(--gray-700); font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+  .status-chip-count { font-weight: 400; color: var(--gray-500); }
+  .status-chip.is-on { background: var(--gray-200); border-color: transparent; color: var(--gray-900); } /* 선택은 바탕만, 테두리 없음 · 검정은 「계정 만들기」에만 */
+  .empty { padding: 48px 16px; }
   .search input { font-size: 16px; }
+  .search-clear { width: 38px; height: 38px; margin-right: -13px; } /* 누르는 영역 38, ✕ 자리는 그대로 */
   .count { margin-left: 0; }
 
   .cards { display: block; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--gray-200); }
   .card-row { padding: 12px 0; border-bottom: 1px solid var(--gray-200); display: flex; flex-direction: column; gap: 4px; }
   .card-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .card-company { font-size: 14px; line-height: 20px; }
-  .card-email { color: var(--gray-700); overflow-wrap: anywhere; }
+  .card-line > :first-child { min-width: 0; } /* 띄어쓰기 없는 긴 회사명 · 이메일도 줄을 바꿔 상태 · ⋮ 를 밀어내지 않게 */
+  /* 휴대폰은 PC 표보다 한 단계 크게: 회사명 16 · 이메일·상태·재발송 14 · 언어/생성자/날짜 13 (검색창 16보다 작아 보이지 않게) */
+  .card-company { font-size: 16px; line-height: 24px; overflow-wrap: anywhere; }
+  .card-email { font-size: 14px; line-height: 20px; color: var(--gray-700); overflow-wrap: anywhere; }
   .card-meta { color: var(--gray-500); }
+  .card-row.is-cancelled .card-company,
+  .card-row.is-cancelled .card-email { color: var(--gray-500); } /* 발급 취소 카드는 흐리게 — 취소선은 「주소 오류」로 읽혀 쓰지 않음 */
+  .card-status { flex: none; display: inline-flex; align-items: center; gap: 2px; font-size: 14px; line-height: 20px; }
+  .card-more { position: relative; display: inline-flex; }
+  .card-more-button { display: flex; align-items: center; justify-content: center; width: 40px; height: 36px; margin: -13px -14px -3px -6px; padding: 10px 0 0; border: 0; background: none; color: var(--gray-500); cursor: pointer; border-radius: var(--radius-control); } /* 누르는 영역 40×36, 아이콘 자리는 그대로 · 아래로는 3px만 넘쳐 「재발송」과 안 겹침 */
+  .profile-menu.card-more-menu { top: calc(100% + 4px); right: 0; min-width: 140px; }
   .link-action {
     display: inline-flex;
     align-items: center;
@@ -471,9 +528,10 @@ p {
     flex: none;
     border: 0;
     background: none;
-    padding: 7px 0; /* 누르는 영역 32 이상, 화면 모양은 글자 높이 */
-    margin: -7px 0;
-    font-size: 13px;
+    padding: 0 0 14px; /* 누르는 영역 34, 화면 모양은 글자 높이 · 위는 ⋮ 자리라 아래로 넓힘 */
+    margin: 0 0 -14px;
+    font-size: 14px;
+    line-height: 20px;
     font-weight: 600;
     color: var(--gray-900);
     cursor: pointer;
@@ -481,6 +539,13 @@ p {
   .link-action--muted { font-weight: 400; color: var(--gray-500); }
 
   .pagination { grid-template-columns: 1fr; justify-items: center; gap: 8px; margin-top: 0; }
+  .pagination.is-single { display: none; } /* 한 페이지뿐이면 휴대폰은 번호 줄을 감춰요 */
+  /* 작은 버튼은 보이는 크기 그대로, 누르는 영역만 40 가까이 */
+  .page-btn,
+  .profile-button { position: relative; }
+  .page-btn::after { content: ""; position: absolute; inset: -6px -4px; } /* 36×40 · 버튼 사이 8px라 옆과 안 겹침 */
+  .profile-button::after { content: ""; position: absolute; inset: -6px; }
+  .eye-toggle { width: 40px; height: 38px; margin-right: 2px; }
   .pagination-range,
   .page-size { display: none; }
 
@@ -492,7 +557,34 @@ p {
   .input-box,
   .segmented button { height: 40px; }
   .dialog-actions .btn { flex: 1; height: 40px; }
+  /* 키보드가 올라와 창이 가려져도 버튼은 보이는 영역 맨 아래에 붙어 있게 · 평소 자리와 간격은 그대로 */
+  .dialog-actions { position: sticky; bottom: -16px; margin: -12px 0 -16px; padding: 12px 0 16px; background: var(--gray-0); }
   .mail-failure-sentence { display: block; }
 
   .toast { left: 16px; right: 16px; bottom: 16px; }
+}
+
+/* ── 호버: 마우스가 있는 기기에서만(터치에서 눌린 채 남지 않게) ── */
+@media (hover: hover) {
+  .btn-dark:hover:not(:disabled) { background: var(--gray-800); }
+  .btn-outline:hover:not(:disabled) { background: var(--gray-50); border-color: var(--gray-400); }
+  .btn-danger-outline:hover:not(:disabled) { background: var(--gray-50); }
+  .login-card .btn:hover:not(:disabled) { background: var(--gray-100); }
+  .app-menu-item:hover { color: var(--gray-900); }
+  .search:hover:not(:focus-within),
+  .select:hover:not(:focus-within),
+  .input-box:hover:not(:focus-within):not(.is-error) { border-color: var(--gray-400); }
+  .login-card .input-box:hover:not(:focus-within):not(.is-error) { border-color: var(--gray-500); }
+  .segmented button:hover:not([aria-checked="true"]) { background: var(--gray-50); }
+  .tr:not(.th):hover { background: var(--gray-50); }
+  .page-btn:hover:not(:disabled):not(.is-current) { background: var(--gray-50); color: var(--gray-900); }
+  .page-size:hover .popup-select-button { color: var(--gray-700); }
+  .status-chip:hover:not(.is-on) { background: var(--gray-50); }
+  .link-action:hover { color: var(--gray-700); }
+  .link-action--muted:hover { color: var(--gray-700); }
+  .empty-action:hover { background: var(--gray-50); border-color: var(--gray-400); }
+  .search-clear:hover,
+  .eye-toggle:hover { color: var(--gray-500); }
+  .login-card .eye-toggle:hover { color: var(--gray-300); }
+  .profile-button:hover .identity-name { color: var(--gray-600); }
 }

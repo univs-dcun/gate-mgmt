@@ -73,10 +73,11 @@ export type CreateAccountInput = {
  * pending 이면 그 발급 기록 번호(id)로 다시 보내요.
  * resendBlocked = 같은 주소로 3번 연속 주소 오류라 서버가 다시 보내기를 막았어요(발급 취소만 가능 · 목록과 같은 규칙).
  * 예전 서버는 주지 않아요(없으면 false).
+ * company = 그 발급 기록의 회사명(창에 기록 그대로 보여 주려고). 서버가 주지 않으면 이메일만 보여요.
  */
 export type EmailCheck =
   | { status: "new" }
-  | { status: "pending"; id: string; createdBy: string; createdAt: string; language: MailLanguage; resendBlocked: boolean }
+  | { status: "pending"; id: string; createdBy: string; createdAt: string; language: MailLanguage; resendBlocked: boolean; company?: string }
   | { status: "in_use" };
 
 export type CreateAccountResult =
@@ -191,6 +192,7 @@ export async function checkEmail(email: string): Promise<EmailCheck> {
     createdAt?: string;
     language?: MailLanguage;
     resendBlocked?: boolean | null;
+    company?: string | null;
   }>("GET", `${MGMT}/accounts/email-check?email=${encodeURIComponent(email)}`);
   if (data.status === "pending" && data.id && data.createdBy && data.createdAt && data.language) {
     return {
@@ -200,6 +202,7 @@ export async function checkEmail(email: string): Promise<EmailCheck> {
       createdAt: data.createdAt,
       language: data.language,
       resendBlocked: data.resendBlocked === true,
+      ...(data.company ? { company: data.company } : {}),
     };
   }
   return data.status === "in_use" ? { status: "in_use" } : { status: "new" };

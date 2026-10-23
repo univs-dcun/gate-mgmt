@@ -1,17 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Brand } from "@/components/ui";
 import { IcVisibilityOff, IcVisibilityOn } from "@/components/icons";
 import { login } from "@/lib/api";
-import { saveStaff, useLoginReason } from "@/lib/session";
+import { saveStaff, useLoginReason, useStaff } from "@/lib/session";
 
 /** 임시 비밀번호(변경 강제) 계정 — 비밀번호 바꾸는 화면은 Gate 콘솔에만 있어요. */
 const PASSWORD_REQUIRED = "비밀번호를 바꿔야 백오피스를 쓸 수 있습니다. Gate 콘솔에 로그인해 비밀번호를 바꾼 뒤 다시 로그인해 주세요.";
 
 export default function LoginPage() {
   const router = useRouter();
+  const staff = useStaff();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +29,11 @@ export default function LoginPage() {
         : reason === "password"
           ? PASSWORD_REQUIRED
           : "로그인이 만료되었습니다. 다시 로그인해 주세요.";
+
+  // 이미 로그인했으면 이 화면을 건너뛰어요.
+  useEffect(() => {
+    if (staff) router.replace("/accounts");
+  }, [staff, router]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,17 +66,12 @@ export default function LoginPage() {
 
   return (
     <main className="login">
-      {/* 휴대폰: 위쪽 48px 띠에 흰 로고, 화면 전체가 다크 모드처럼 반전 */}
-      <div className="login-top">
-        <Brand inverse />
-      </div>
       <form className="login-card" onSubmit={onSubmit} noValidate>
         <div className="login-brand">
-          <Brand />
+          <Brand inverse />
         </div>
-        <h1 className="t-heading-200">
-          로그인
-        </h1>
+        {/* 제목은 화면에서 빼고(버튼과 같은 말) 화면 읽기 프로그램용으로만 남겨요 */}
+        <h1 className="visually-hidden">로그인</h1>
         {notice && (
           <p className="error" role="status">
             {notice}
@@ -130,6 +131,7 @@ export default function LoginPage() {
 
         <p className="help">계정이 없으면 운영 담당자에게 요청해 주세요.</p>
       </form>
+      <p className="login-copyright">ⓒ 2026 UNIVERSE AI</p>
     </main>
   );
 }
